@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Flashcards</title>
+        <style>
+        .card {
+            margin: 4rem;
+            border: 1px solid #999999;
+            border-radius: 3px;
+            display: grid;
+            grid-template-rows: max-content 200px 1fr;
+        }
+        .card h2 {
+            text-align: center;
+            margin: 0;
+            padding: 0.5rem;
+        }
+
+        .card h3 {
+            text-align: center;
+            margin: 0;
+            padding: 0.5rem;
+        }
+
+        .card .content {
+            padding: 0.5rem;
+        }
+        .card .back {
+            visibility: hidden;
+        }
+        .card .note {
+            visibility: hidden;
+        }
+        </style>
+        <script>
+        var prevQuestionIds = [];
+        function pushToPrevQuestionIds(item) {
+            if (prevQuestionIds.length == 10) {
+                prevQuestionIds.shift();
+            }
+            console.log("pushing ", item);
+            prevQuestionIds.push(item);
+        }
+        const types = {
+            INTERROGATIVE: "interrogative",
+            COLOR: "color"
+        };
+        const language = {
+            SPANSIH: "spanish",
+            ENGLISH: "english"
+        }
+        const questions = [
+            {
+                "id": 0,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cómo estás?",
+                "back": "How are you?"
+            },
+            {
+                "id": 1,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué tal?",
+                "back": "How is it going?"
+            },
+            {
+                "id": 2,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cómo te llamas?",
+                "back": "What is your name?"
+            },
+            {
+                "id": 3,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué significa esta palabra?",
+                "back": "What does this word mean?"
+            },
+            {
+                "id": 4,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué significa eso?",
+                "back": "What does that mean?"
+            },
+            {
+                "id": 5,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué significa esto?",
+                "back": "What does this mean?"
+            },
+            {
+                "id": 6,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuánto cuesta?",
+                "back": "How much is it"
+            },
+            {
+                "id": 7,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Dónde trabajas?",
+                "back": "Where do you work?"
+            },
+            {
+                "id": 8,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué haces?",
+                "back": "What do you do?",
+                "note": "(for work)"
+            },
+            {
+                "id": 9,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿A qué te dedicas?",
+                "back": "What do you do for a living?",
+            },
+            {
+                "id": 10,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuál es tu teléfono?",
+                "back": "What is your phone number?",
+            },
+            {
+                "id": 11,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuál es to número de móvil?",
+                "back": "What is your phone number?",
+            },
+            {
+                "id": 12,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Tienes correo electrónico?",
+                "back": "What is your e-mail?",
+            },
+            {
+                "id": 13,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuál es tu correo electrónico?",
+                "back": "What is your e-mail?",
+            },
+            {
+                "id": 14,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Quién es?",
+                "back": "Who is that?",
+            },
+            {
+                "id": 15,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Quién es él?",
+                "back": "Who is he?",
+            },
+            {
+                "id": 16,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Quién es ella?",
+                "back": "Who is she?",
+            },
+            {
+                "id": 17,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué idiomas hablas?",
+                "back": "What languages do you speak?",
+            },
+            {
+                "id": 18,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿De dónde eres?",
+                "back": "Where are you from?",
+            },
+            {
+                "id": 19,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuándo es tu cumpleaños?",
+                "back": "When is your birthday?",
+            },
+            {
+                "id": 20,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Por qué estudias español?",
+                "back": "Why do you study spanish?",
+            },
+            {
+                "id": 21,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuántos cosas hay?",
+                "back": "How many things are there?",
+            },
+            {
+                "id": 22,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Algo más?",
+                "back": "Anything else?",
+            },
+            {
+                "id": 23,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuántos quieres?",
+                "back": "How many do you want?",
+            },
+            {
+                "id": 24,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Cuánto es?",
+                "back": "How much is it?",
+            },
+            {
+                "id": 25,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué llevan?",
+                "back": "How much is it?",
+                "note": "llevar: to contain"
+            },
+            {
+                "id": 26,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué van a tomar?",
+                "back": "What would you like to drink?",
+            },
+            {
+                "id": 27,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué hora es?",
+                "back": "What time is it?",
+            },
+            {
+                "id": 28,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿A qué hora es cenas?",
+                "back": "What time is dinner?",
+            },
+            {
+                "id": 28,
+                "type": types.INTERROGATIVE,
+                "language": language.SPANISH,
+                "front": "¿Qué le pongo?",
+                "back": "What can I get you?",
+            },
+        ];
+
+        function getQuestion() {
+            var idx = Math.floor(Math.random() * questions.length);
+            if (prevQuestionIds.includes(idx)) {
+                return getQuestion();
+            }
+            return questions[idx];
+        }
+
+        function showHide() {
+            var button = document.getElementById("showhidebutton");
+            var back = document.getElementById("cardback");
+            var note = document.getElementById("cardnote");
+            switch (button.innerHTML) {
+                case "Show":
+                    back.style.visibility = "visible";
+                    note.style.visibility = "visible";
+                    button.innerHTML = "Hide";
+                    break;
+                case "Hide":
+                    back.style.visibility = "hidden";
+                    note.style.visibility = "hidden";
+                    button.innerHTML = "Show";
+                    break;
+            };
+        }
+
+        function nextCard() {
+            var front = document.getElementById("cardfront");
+            var back = document.getElementById("cardback");
+            var note = document.getElementById("cardnote");
+            var showhidebutton = document.getElementById("showhidebutton");
+            showhidebutton.innerHTML = "Show";
+            back.style.visibility = "hidden";
+            note.style.visibility = "hidden";
+
+            var question = getQuestion();
+            front.innerHTML = question.front
+            back.innerHTML = question.back;
+            if (question.note) {
+                note.innerHTML = question.note;
+            } else {
+                note.innerHTML = "";
+            }
+            pushToPrevQuestionIds(question.id);
+        }
+        </script>
+    </head>
+    <body>
+        <h1>Flashcards</h1>
+
+        <article class="card">
+            <div id="cardcontent" class="content">
+                <h2 id="cardfront" class="front">Front question</h2>
+
+                <div></div>
+
+                <h2 id="cardback" class="back">Back answer</h2>
+                <h3 id="cardnote" class="note">Back note</h3>
+
+            </div>
+            <footer>
+                <button
+                    id="showhidebutton"
+                    class="button"
+                    onclick="showHide()">Show</button>
+                <button
+                    id="nextbutton"
+                    class="button"
+                    onclick="nextCard()">Next</button>
+            </footer> 
+        </article>
+    </body>
+</html>
